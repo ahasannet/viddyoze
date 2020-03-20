@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Products</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+ <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<button type="button" class="btn btn-secondary float-right"><a href="/shop" class="text-white">View Products</a></button>
+		<h2>Order Items</h2> 
+		<div class="table-responsive">
+    		<table class="table table-bordered">
+      			<thead>
+				   	<tr>  
+						<th>Product Name</th>  
+				      	<th>Product Code</th>  
+				      	<th></th>
+				      	<th>Unit Price</th>  
+				      	<th>Quantity</th>
+				      	<th>Before Discount</th>
+				      	<th>Discount</th>
+				      	<th>After Discount</th>
+				   	</tr>  
+				</thead>
+	      		<tbody>
+				{% for orderItem in orderItems %} 
+					<tr>  
+		  				<td>
+		  				{% for product in products %}
+		  				{% if product.id == orderItem.productId %}
+		  				{{ product.name }} </td><td>
+		  				{{ product.code }} </td><td>
+		  				<form action="/cart/update"><input type="hidden" name="code" value="{{ product.code }}" /><button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i></button></form>
+		  				<form action="/cart/remove" style="margin-top:5px;"><input type="hidden" name="code" value="{{ product.code }}" /><button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-minus"></i></button></form>
+		  				{% endif %}
+		  				{% endfor %}
+		  				</td>   
+		  				<td>${{ orderItem.unitPrice }}</td>  
+		  				<td>{{ orderItem.quantity }}</td>
+		  				<td>${{ orderItem.unitPrice * orderItem.quantity }}</td>   
+		  				<td>${{ orderItem.discount }}</td> 
+		  				<td>${{ orderItem.total }}</td> 
+					</tr>  
+				{% endfor %} 
+				{% if order != null %}
+				<tr>
+					<td colspan="6"></td>
+					<td>Shipping Charge</td>
+					<td>{{ order.shipment }}</td>
+				<tr>
+				<tr>
+					<td colspan="6"></td>
+					<td>Grand Total</td>
+					<td>{{ order.total }}</td>
+				<tr>
+				{% endif %}
+				</tbody>
+			</table> 
+  		</div>
+	</div>
+</body>
+</html>
